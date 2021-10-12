@@ -35,4 +35,11 @@ const store = createStore(reducer);
 console.log('Initial state', store.getState());
 
 // kalau ada perubahan state, jalankan function tersebut.
-store.subscribe(() => console.log('Update state', store.getState()));
+// store.subscribe() returns a unsubscribe function for unsubscribe
+const unsubscribe = store.subscribe(() =>
+  console.log('Update state', store.getState())
+);
+store.dispatch(buyCake());
+store.dispatch(buyCake());
+store.dispatch(buyCake());
+unsubscribe();
