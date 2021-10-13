@@ -1,5 +1,5 @@
 const redux = require('redux');
-const createStore = redux.createStore();
+const createStore = redux.createStore;
 
 // Action name---
 const BUY_CAKE = 'BUY_CAKE';
@@ -31,13 +31,14 @@ const reducer = (state = initialState, action) => {
   }
 };
 
+console.log(reducer);
 const store = createStore(reducer);
 console.log('Initial state', store.getState());
 
 // kalau ada perubahan state, jalankan function tersebut.
 // store.subscribe() returns a unsubscribe function for unsubscribe
 const unsubscribe = store.subscribe(() =>
-  console.log('Update state', store.getState())
+  console.log('Updated state', store.getState())
 );
 store.dispatch(buyCake());
 store.dispatch(buyCake());
