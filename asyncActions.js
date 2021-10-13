@@ -1,5 +1,9 @@
 const redux = require('redux');
+const thunk = require('redux-thunk').default;
+const axios = require('axios');
+
 const createStore = redux.createStore;
+const applyMiddleware = redux.applyMiddleware;
 
 const initialState = {
   loading: false,
@@ -61,4 +65,26 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const store = createStore(reducer);
+const fetchUsers = () => {
+  // Thunk brings an ability to action creator, to be able to return a function
+  // this function can execute dispatch, which it receives from its parameters
+  return function (dispatch) {
+    dispatch(fetchUsersRequest());
+
+    axios
+      .get('https://jsonplaceholder.typicode.com/users')
+      .then((res) => {
+        // res.data
+        const users = res.data.map((user) => user.id);
+        dispatch(fetchUsersSuccess(users));
+      })
+      .catch((err) => {
+        // err.message
+        dispatch(fetchUsersFailure(err.message));
+      });
+  };
+};
+
+const store = createStore(reducer, applyMiddleware(thunk));
+store.subscribe(() => console.log(store.getState()));
+store.dispatch(fetchUsers());
